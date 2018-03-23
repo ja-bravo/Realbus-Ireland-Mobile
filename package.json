@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@mapbox/react-native-mapbox-gl": "^6.1.0",
+    "axios": "^0.18.0",
     "mapbox": "^1.0.0-beta9",
     "react": "16.2.0",
     "react-native": "0.52.0",

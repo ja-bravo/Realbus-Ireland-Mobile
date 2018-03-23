@@ -6,10 +6,14 @@ Mapbox.setAccessToken('pk.eyJ1IjoiYm9vbmFnZW5jeWlybCIsImEiOiJjamE3emdlZ3YwMXIxMn
 export default class Map extends React.Component {
   constructor() {
     super();
+    navigator.geolocation.getCurrentPosition((pos) => {
+      const coords = pos.coords;
+      this.setState({userPosition: coords});
+    });
   }
   
   async onReady() {
-    this.map.fitBounds([-9.093649,53.282784],[-9.045685,53.270138],0,5000);
+    //this.map.flyTo([this.state.userPosition.longitude,this.state.userPosition.latitude]);
   }
 
   render() {
@@ -17,9 +21,11 @@ export default class Map extends React.Component {
       <Mapbox.MapView
             styleURL={Mapbox.StyleURL.Dark}
             zoomLevel={15}
-            centerCoordinate={[11.256, 43.770]}
+            centerCoordinate={[-9.045685,53.270138]}
             style={style.container}
             logoEnabled={false}
+            showUserLocation
+            userTrackingMode={Mapbox.UserTrackingModes.Follow}
             ref={ref => this.map = ref}
             onDidFinishLoadingMap={() => this.onReady()}>
         </Mapbox.MapView>
