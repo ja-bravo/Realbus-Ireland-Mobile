@@ -1,19 +1,41 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import Mapbox from '@mapbox/react-native-mapbox-gl';
+import axios from 'axios';
 Mapbox.setAccessToken('pk.eyJ1IjoiYm9vbmFnZW5jeWlybCIsImEiOiJjamE3emdlZ3YwMXIxMnhxbWRqNGRxY3huIn0.RnmocFzP2hqvfi9nnTgi0A');
 
 export default class Map extends React.Component {
   constructor() {
     super();
-    navigator.geolocation.getCurrentPosition((pos) => {
-      const coords = pos.coords;
-      this.setState({userPosition: coords});
-    });
+    this.state = {
+      items: []
+    }
   }
   
   async onReady() {
-    //this.map.flyTo([this.state.userPosition.longitude,this.state.userPosition.latitude]);
+    const [ne, sw] = await this.map.getVisibleBounds();
+    let res = await axios.get(`http://192.168.0.185:3006/api/stops/bounds`,
+    {
+      params: {
+        topLat: ne[1],
+        topLon: ne[0],
+        botLat: sw[1],
+        botLon: sw[0]
+      }
+    });
+    
+    const stops = res.data;
+    
+    this.setState({items: stops.map(s
+    => (
+      <MapboxGL.PointAnnotation
+          key={s.id}
+          id={s.id}
+          title={s.fullName}
+          coordinate={s.location}>
+
+        </MapboxGL.PointAnnotation>
+    ))});
   }
 
   render() {
