@@ -3,13 +3,22 @@ import { StyleSheet } from 'react-native';
 import Mapbox from '@mapbox/react-native-mapbox-gl';
 import axios from 'axios';
 Mapbox.setAccessToken('pk.eyJ1IjoiYm9vbmFnZW5jeWlybCIsImEiOiJjamE3emdlZ3YwMXIxMnhxbWRqNGRxY3huIn0.RnmocFzP2hqvfi9nnTgi0A');
+import icon from '../../assets/place.png';
+
+const styles = Mapbox.StyleSheet.create({
+  icon: {
+    iconImage: icon,
+    iconAllowOverlap: false,
+    iconSize: 0.5,
+  },
+});
 
 export default class Map extends React.Component {
   constructor() {
     super();
     this.state = {
-      items: []
-    }
+      featureCollection: Mapbox.geoUtils.makeFeatureCollection(),
+    };
   }
   
   async onReady() {
@@ -24,18 +33,23 @@ export default class Map extends React.Component {
       }
     });
     
-    const stops = res.data;
-    
-    this.setState({items: stops.map(s
-    => (
-      <MapboxGL.PointAnnotation
-          key={s.id}
-          id={s.id}
-          title={s.fullName}
-          coordinate={s.location}>
+    const stops = res.data.map(s =>  {return {...s, geometry: {
+      type: "Point",
+      coordinates: [Number.parseFloat(s.location.lon), Number.parseFloat(s.location.lat)]
+    }}});
 
-        </MapboxGL.PointAnnotation>
-    ))});
+    let collection = Mapbox.geoUtils.makeFeatureCollection();
+    stops.forEach(stop => {
+      collection = Mapbox.geoUtils
+                   .addToFeatureCollection(this.state.featureCollection,
+                                           Mapbox.geoUtils.makeFeature(stop.geometry))
+    });
+   
+    this.setState({featureCollection: collection});
+
+    setTimeout(() => {
+      console.dir(this.map)
+    },2000)
   }
 
   render() {
@@ -50,6 +64,15 @@ export default class Map extends React.Component {
             userTrackingMode={Mapbox.UserTrackingModes.Follow}
             ref={ref => this.map = ref}
             onDidFinishLoadingMap={() => this.onReady()}>
+            <Mapbox.ShapeSource
+              id="symbolLocationSource"
+              shape={this.state.featureCollection}>
+              <Mapbox.SymbolLayer
+                id="symbolLocationSymbols"
+                style={styles.icon}
+              />
+            </Mapbox.ShapeSource>
+
         </Mapbox.MapView>
     );
   }

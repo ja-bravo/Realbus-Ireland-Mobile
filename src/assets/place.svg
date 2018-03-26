@@ -1,0 +1,27 @@
+<svg width="30" height="39" viewBox="0 0 30 39" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>Group</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(573 204)">
+<g id="Group">
+<g id="Canvas">
+<g id="place" filter="url(#filter0_d)">
+<g id="Vector">
+<use xlink:href="#path0_fill" transform="translate(-569 -204)" fill="#BFACC8"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<filter id="filter0_d" filterUnits="userSpaceOnUse" x="-573" y="-204" width="30" height="39" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 255 0"/>
+<feOffset dx="0" dy="4"/>
+<feGaussianBlur stdDeviation="2"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+</filter>
+<path id="path0_fill" d="M 8.02148 13.5137C 8.79228 14.2364 9.70768 14.5977 10.7676 14.5977C 11.8275 14.5977 12.7188 14.2364 13.4414 13.5137C 14.2123 12.7429 14.5977 11.8275 14.5977 10.7676C 14.5977 9.70768 14.2123 8.81638 13.4414 8.09378C 12.7188 7.32288 11.8275 6.93748 10.7676 6.93748C 9.70768 6.93748 8.79228 7.32288 8.02148 8.09378C 7.29878 8.81638 6.93748 9.70768 6.93748 10.7676C 6.93748 11.8275 7.29878 12.7429 8.02148 13.5137ZM 3.10738 3.17969C 5.22718 1.0599 7.78058 -3.23486e-08 10.7676 -3.23486e-08C 13.7546 -3.23486e-08 16.2839 1.0599 18.3555 3.17969C 20.4753 5.2513 21.5352 7.78058 21.5352 10.7676C 21.5352 12.2611 21.1498 13.9714 20.3789 15.8985C 19.6563 17.8255 18.765 19.6322 17.7051 21.3184C 16.6452 23.0046 15.5853 24.5944 14.5254 26.0879C 13.5137 27.5332 12.6465 28.6895 11.9238 29.5567L 10.7676 30.7852C 10.4785 30.4479 10.0931 30.0143 9.61138 29.4844C 9.12958 28.9063 8.26238 27.7982 7.00978 26.1602C 5.75718 24.474 4.64908 22.86 3.68558 21.3184C 2.77018 19.7285 1.92709 17.946 1.15625 15.9707C 0.38542 13.9955 -3.23486e-08 12.2611 -3.23486e-08 10.7676C -3.23486e-08 7.78058 1.03581 5.2513 3.10738 3.17969Z"/>
+</defs>
+</svg>
