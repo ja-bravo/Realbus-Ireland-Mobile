@@ -8,8 +8,14 @@ import icon from '../../assets/place.png';
 const styles = Mapbox.StyleSheet.create({
   icon: {
     iconImage: icon,
-    iconAllowOverlap: false,
+    iconAllowOverlap: true,
     iconSize: 0.5,
+    textField: '{fullName}',
+    textColor: 'white',
+    textSize: 12,
+    textAnchor: 'top',
+    textMaxWidth: 12,
+    textOffset: [0,1.3]
   },
 });
 
@@ -18,38 +24,47 @@ export default class Map extends React.Component {
     super();
     this.state = {
       featureCollection: Mapbox.geoUtils.makeFeatureCollection(),
+      isLoaded: false,
     };
   }
   
-  async onReady() {
-    const [ne, sw] = await this.map.getVisibleBounds();
-    let res = await axios.get(`http://192.168.0.185:3006/api/stops/bounds`,
-    {
-      params: {
-        topLat: ne[1],
-        topLon: ne[0],
-        botLat: sw[1],
-        botLon: sw[0]
-      }
-    });
+  async getThingies() {
+    if(this.state.isLoaded) {
+      const [ne, sw] = await this.map.getVisibleBounds();
+      let res = await axios.get(`http://192.168.0.16:3006/api/stops/bounds`,
+      {
+        params: {
+          topLat: ne[1],
+          topLon: ne[0],
+          botLat: sw[1],
+          botLon: sw[0]
+        }
+      });
+      
+      const stops = res.data.map(s =>  {return {...s, geometry: {
+        type: "Point",
+        coordinates: [Number.parseFloat(s.location.lon), Number.parseFloat(s.location.lat)]
+      }}});
+
+      let collection = Mapbox.geoUtils.makeFeatureCollection();
+      stops.forEach(stop => {
+        collection = Mapbox.geoUtils.addToFeatureCollection(this.state.featureCollection,Mapbox.geoUtils.makeFeature(stop.geometry,stop))
+      });
     
-    const stops = res.data.map(s =>  {return {...s, geometry: {
-      type: "Point",
-      coordinates: [Number.parseFloat(s.location.lon), Number.parseFloat(s.location.lat)]
-    }}});
+      this.setState({featureCollection: collection});
+      console.dir(JSON.stringify(this.state.featureCollection));
+    }
+  }
 
-    let collection = Mapbox.geoUtils.makeFeatureCollection();
-    stops.forEach(stop => {
-      collection = Mapbox.geoUtils
-                   .addToFeatureCollection(this.state.featureCollection,
-                                           Mapbox.geoUtils.makeFeature(stop.geometry))
-    });
-   
-    this.setState({featureCollection: collection});
+  async onReady() {
+    console.log('ready');
+    this.setState({isLoaded: true});
+    this.getThingies();
+  }
 
-    setTimeout(() => {
-      console.dir(this.map)
-    },2000)
+  async onRegionChange() {
+    console.log('change');
+    this.getThingies();
   }
 
   render() {
@@ -59,10 +74,10 @@ export default class Map extends React.Component {
             zoomLevel={15}
             centerCoordinate={[-9.045685,53.270138]}
             style={style.container}
+            rotateEnabled={false}
             logoEnabled={false}
-            showUserLocation
-            userTrackingMode={Mapbox.UserTrackingModes.Follow}
             ref={ref => this.map = ref}
+            onRegionDidChange={() => this.onRegionChange()}
             onDidFinishLoadingMap={() => this.onReady()}>
             <Mapbox.ShapeSource
               id="symbolLocationSource"

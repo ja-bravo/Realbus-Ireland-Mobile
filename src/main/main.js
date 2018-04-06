@@ -13,7 +13,7 @@ export default class Main extends React.Component {
     return (
       <View style={style.container}>
         <FloatingInput/>
-        <Map/>
+           <Map/>   
       </View>
     );
   }
